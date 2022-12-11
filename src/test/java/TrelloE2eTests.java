@@ -1,4 +1,6 @@
 import helpers.Configuration;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;
 
@@ -11,14 +13,18 @@ public class TrelloE2eTests extends TestBase {
 
     @Test(priority = 1)
     public void shouldCreateBoardWithoutDefaultLists() {
-        given()
-                .spec(reqSpec)
-                .queryParam("name", "This is my board")
-                .queryParam("defaultLists", "false").
-        when()
-                .post(baseUrl + boards).
-        then()
-                .statusCode(200);
+        Response response =
+                    given()
+                            .spec(reqSpec)
+                            .queryParam("name", "This is my board")
+                            .queryParam("defaultLists", false).
+                    when()
+                            .post(baseUrl + boards).
+                    then()
+                            .statusCode(200)
+                            .extract().response();
+
+        boardId = response.jsonPath().get("id");
     }
 
     @Test(priority = 2)

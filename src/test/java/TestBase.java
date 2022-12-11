@@ -8,11 +8,11 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeMethod;
 
 public class TestBase {
-    public String baseUrl = Configuration.getBaseUrl();
-    public String boards = "/boards";
-    public String lists = "/lists";
-    public String cards = "/cards";
-    public String actions = "/actions";
+    public final static String baseUrl = Configuration.getBaseUrl();
+    public final static String boards = "/boards";
+    public final static String lists = "/lists";
+    public final static String cards = "/cards";
+    public final static String actions = "/actions";
     public RequestSpecification reqSpec;
     @BeforeMethod
     public void testSetup(){
