@@ -17,9 +17,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("name", "This is my board")
                         .queryParam("defaultLists", false).
-                when()
+                        when()
                         .post(baseUrl + boards).
-                then()
+                        then()
                         .statusCode(200)
                         .extract().response();
 
@@ -33,9 +33,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("name", "DONE")
                         .queryParam("idBoard", boardId).
-                when()
+                        when()
                         .post(baseUrl + lists).
-                then()
+                        then()
                         .statusCode(200)
                         .extract().response();
 
@@ -44,18 +44,40 @@ public class TrelloE2eTests extends TestBase {
 
     @Test(priority = 3)
     public void shouldCreateTodoList() {
+        Response response =
+                given()
+                        .spec(reqSpec)
+                        .queryParam("name", "TODO")
+                        .queryParam("idBoard", boardId).
+                        when()
+                        .post(baseUrl + lists).
+                        then()
+                        .statusCode(200)
+                        .extract().response();
 
+        todoId = response.jsonPath().get("id");
     }
 
 
     @Test(priority = 4)
     public void shouldCreateCardOnTodo() {
+        Response response =
+                given()
+                        .spec(reqSpec)
+                        .queryParam("idList", todoId)
+                        .queryParam("name", "RestIntro").
+                        when()
+                        .post(baseUrl + cards).
+                        then()
+                        .statusCode(200)
+                        .extract().response();
 
+        cardId = response.jsonPath().get("id");
     }
 
 
     @Test(priority = 5)
-    public void shouldAddCommentToCar() {
+    public void shouldAddCommentToCard() {
 
     }
 
@@ -76,9 +98,9 @@ public class TrelloE2eTests extends TestBase {
         given()
                 .spec(reqSpec)
                 .pathParam("id", boardId).
-        when()
+                when()
                 .delete(baseUrl + boards + "/{id}").
-        then()
+                then()
                 .statusCode(200);
     }
 
