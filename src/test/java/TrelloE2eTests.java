@@ -63,7 +63,13 @@ public class TrelloE2eTests extends TestBase {
 
     @Test(priority = 8)
     public void shouldDeletedBoard() {
-
+        given()
+                .spec(reqSpec)
+                .pathParam("id", boardId).
+        when()
+                .delete(baseUrl + boards + "/{id}").
+        then()
+                .statusCode(200);
     }
 
     @Test(priority = 9)
