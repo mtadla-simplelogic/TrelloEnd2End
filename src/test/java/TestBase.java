@@ -35,12 +35,12 @@ public class TestBase {
     }
 
     @AfterSuite
-    public void testsCleaup() {
+    public void testsCleanup() {
         Response response =
                 given()
                         .spec(reqSpec)
                         .when()
-                        .pathParam("id", "postman349")
+                        .pathParam("id", "YOUR_ORG_ID")
                         .get(baseUrl + "/organizations/{id}/boards")
                         .then()
                         .statusCode(200)

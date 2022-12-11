@@ -20,9 +20,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("name", "This is my board")
                         .queryParam("defaultLists", false).
-                        when()
+                when()
                         .post(baseUrl + boards).
-                        then()
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -36,9 +36,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("name", "DONE")
                         .queryParam("idBoard", boardId).
-                        when()
+                when()
                         .post(baseUrl + lists).
-                        then()
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -52,9 +52,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("name", "TODO")
                         .queryParam("idBoard", boardId).
-                        when()
+                when()
                         .post(baseUrl + lists).
-                        then()
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -69,9 +69,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("idList", todoId)
                         .queryParam("name", "RestIntro").
-                        when()
+                when()
                         .post(baseUrl + cards).
-                        then()
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -85,10 +85,10 @@ public class TrelloE2eTests extends TestBase {
                 given()
                         .spec(reqSpec)
                         .queryParam("text", "done!!")
-                        .pathParam("cardId", cardId)
-                        .when()
-                        .post(baseUrl + cards + "/{cardId}/actions/comments")
-                        .then()
+                        .pathParam("cardId", cardId).
+                when()
+                        .post(baseUrl + cards + "/{cardId}/actions/comments").
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -114,17 +114,24 @@ public class TrelloE2eTests extends TestBase {
                 .pathParam("actionId", actionId)
 //                .body(emojiV0)
 //                .body(emojiV1)
-                .body(emojiV2)
-                .when()
-                .post(baseUrl + actions + "/{actionId}/reactions")
-                .then()
+                .body(emojiV2).
+        when()
+                .post(baseUrl + actions + "/{actionId}/reactions").
+        then()
                 .statusCode(200);
     }
 
 
     @Test(priority = 7)
     public void shouldMoveCardToDoneList() {
-
+        given()
+                .spec(reqSpec)
+                .pathParam("cardId", cardId)
+                .queryParam("idList", doneId).
+        when()
+                .put(baseUrl + cards + "/{cardId}").
+        then()
+                .statusCode(200);
     }
 
     @Test(priority = 8)
@@ -132,14 +139,20 @@ public class TrelloE2eTests extends TestBase {
         given()
                 .spec(reqSpec)
                 .pathParam("id", boardId).
-                when()
+        when()
                 .delete(baseUrl + boards + "/{id}").
-                then()
+        then()
                 .statusCode(200);
     }
 
     @Test(priority = 9)
     public void shouldGetDeletedBoard() {
-
+        given()
+                .spec(reqSpec)
+                .pathParam("id", boardId).
+        when()
+                .get(baseUrl + boards + "/{id}").
+        then()
+                .statusCode(404);
     }
 }
