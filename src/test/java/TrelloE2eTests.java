@@ -1,8 +1,7 @@
-import helpers.Configuration;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-import static io.restassured.RestAssured.*;
+
+import static io.restassured.RestAssured.given;
 
 public class TrelloE2eTests extends TestBase {
     private static String boardId;
@@ -14,22 +13,33 @@ public class TrelloE2eTests extends TestBase {
     @Test(priority = 1)
     public void shouldCreateBoardWithoutDefaultLists() {
         Response response =
-                    given()
-                            .spec(reqSpec)
-                            .queryParam("name", "This is my board")
-                            .queryParam("defaultLists", false).
-                    when()
-                            .post(baseUrl + boards).
-                    then()
-                            .statusCode(200)
-                            .extract().response();
+                given()
+                        .spec(reqSpec)
+                        .queryParam("name", "This is my board")
+                        .queryParam("defaultLists", false).
+                        when()
+                        .post(baseUrl + boards).
+                        then()
+                        .statusCode(200)
+                        .extract().response();
 
         boardId = response.jsonPath().get("id");
     }
 
     @Test(priority = 2)
     public void shouldCreateDoneList() {
+        Response response =
+                given()
+                        .spec(reqSpec)
+                        .queryParam("name", "DONE")
+                        .queryParam("idBoard", boardId)
+                        .when()
+                        .post(baseUrl + lists)
+                        .then()
+                        .statusCode(200)
+                        .extract().response();
 
+        doneId = response.jsonPath().get("id");
     }
 
     @Test(priority = 3)
@@ -66,9 +76,9 @@ public class TrelloE2eTests extends TestBase {
         given()
                 .spec(reqSpec)
                 .pathParam("id", boardId).
-        when()
+                when()
                 .delete(baseUrl + boards + "/{id}").
-        then()
+                then()
                 .statusCode(200);
     }
 
