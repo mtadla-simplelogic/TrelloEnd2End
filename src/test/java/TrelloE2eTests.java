@@ -17,9 +17,9 @@ public class TrelloE2eTests extends TestBase {
                         .spec(reqSpec)
                         .queryParam("name", "This is my board")
                         .queryParam("defaultLists", false).
-                        when()
+                when()
                         .post(baseUrl + boards).
-                        then()
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -32,10 +32,10 @@ public class TrelloE2eTests extends TestBase {
                 given()
                         .spec(reqSpec)
                         .queryParam("name", "DONE")
-                        .queryParam("idBoard", boardId)
-                        .when()
-                        .post(baseUrl + lists)
-                        .then()
+                        .queryParam("idBoard", boardId).
+                when()
+                        .post(baseUrl + lists).
+                then()
                         .statusCode(200)
                         .extract().response();
 
@@ -76,9 +76,9 @@ public class TrelloE2eTests extends TestBase {
         given()
                 .spec(reqSpec)
                 .pathParam("id", boardId).
-                when()
+        when()
                 .delete(baseUrl + boards + "/{id}").
-                then()
+        then()
                 .statusCode(200);
     }
 
