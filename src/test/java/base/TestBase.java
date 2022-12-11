@@ -1,3 +1,5 @@
+package base;
+
 import helpers.Configuration;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;

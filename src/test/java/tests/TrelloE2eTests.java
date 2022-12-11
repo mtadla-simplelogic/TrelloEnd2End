@@ -1,3 +1,7 @@
+package tests;
+
+import actions.BoardActions;
+import base.TestBase;
 import io.restassured.response.Response;
 import models.Emoji;
 import org.testng.annotations.Test;
@@ -15,18 +19,7 @@ public class TrelloE2eTests extends TestBase {
 
     @Test(priority = 1)
     public void shouldCreateBoardWithoutDefaultLists() {
-        Response response =
-                given()
-                        .spec(reqSpec)
-                        .queryParam("name", "This is my board")
-                        .queryParam("defaultLists", false).
-                when()
-                        .post(baseUrl + boards).
-                then()
-                        .statusCode(200)
-                        .extract().response();
-
-        boardId = response.jsonPath().get("id");
+        boardId = BoardActions.createBoardWithoutList();
     }
 
     @Test(priority = 2)
